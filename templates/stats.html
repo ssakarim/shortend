@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hello Bulma!</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-</head>
+{% block title %}Global Stats{% endblock %}
 
-<body>
+{% block main %}
+
     <section class="section">
         <div class="container">
             <table class="table">
@@ -31,7 +25,7 @@
                     {% for link in links %}
                     <tr>
                         <td>{{ link.original_url }}</td>
-                        <td>{{ url_for('redirect_to_url', short_url=link.short_url, _external=True) }}</td>
+			<td><a href="{{ url_for('redirect_to_url', short_url=link.short_url, _external=True) }}" target="_blank">{{ url_for('redirect_to_url', short_url=link.short_url, _external=True) }}</td>
                         <td>{{ link.visits }}</td>
                     </tr>
                     {% endfor %}
@@ -39,6 +33,7 @@
             </table>
         </div>
     </section>
-</body>
 
-</html>
+
+{% endblock %}
+

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}URL stats{% endblock %}
+
+{% block main %}
+
+    <section class="section">
+        <div class="container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Original URL</th>
+                        <th>Short URL</th>
+                        <th>Visits</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Original URL</th>
+                        <th>Short URL</th>
+                        <th>Visits</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <tr>
+                        <td>{{ link.original_url }}</td>
+			<td><a href="{{ url_for('redirect_to_url', short_url=link.short_url, _external=True) }}" target="_blank">{{ url_for('redirect_to_url', short_url=link.short_url, _external=True) }}</td>
+                        <td>{{ link.visits }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+{% endblock %}
+

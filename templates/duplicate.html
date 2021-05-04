@@ -1,18 +1,19 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hello Bulma!</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-  </head>
-  <body>
+{% extends 'base.html' %}
+
+{% block title %}Duplicate URL{% endblock %}
+
+{% block main %}
+
   <section class="section">
     <div class="container">
       <h1>Duplicate entry!</h1>
-      <a href="{{ existing_url }}">The Short Link => {{ existing_url }}</a>
+      <a href="{{ existing_url }}" target="_blank">The Short Link => {{ existing_url }}</a>
+        <p>
+    <a href="{{ url_for('index') }}"><button class="btn btn-primary my-2">Home</button></a>
+  </p>
+
     </div>
   </section>
-  </body>
-</html>
+
+{% endblock %}
+
