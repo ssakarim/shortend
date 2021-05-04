@@ -22,13 +22,10 @@ PROJECT_ID =os.environ.get('GCP_PROJECT', 'Specified environment variable is not
 INSTANCE_NAME =os.environ.get('myinstance', 'Specified environment variable is not set.')
 CONNECTION_NAME=os.environ.get('CLOUD_SQL_CONNECTION_NAME', 'Specified environment variable is not set.')
 
-#PUBLIC_IP_ADDRESS ="34.107.83.225"
-#PUBLIC_IP_ADDRESS ="127.0.0.1"
 
 # configuration
-app.config["SECRET_KEY"] = "rKA3sEXd1BJGdtqC0d7qfVcZkuf4t7"
+app.config["SECRET_KEY"] = randStr(N=30)
 app.config["SQLALCHEMY_DATABASE_URI"]= f"mysql+pymysql://{DBUSR}:{PASSWORD}@/{DBNAME}?unix_socket=/cloudsql/{CONNECTION_NAME}"
-#app.config["SQLALCHEMY_DATABASE_URI"]= f"mysql+pymysql://root:{PASSWORD}@{PUBLIC_IP_ADDRESS}:3306/{DBNAME}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= True
 
 db = SQLAlchemy(app)
@@ -68,6 +65,9 @@ def stats():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+
+def randStr(chars = string.ascii_uppercase + string.digits, N=10):
+	return ''.join(random.choice(chars) for _ in range(N))
 
 class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable = False)
