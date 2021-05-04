@@ -2,9 +2,11 @@
 """
 base62
 ~~~~~~
-
 Originated from http://blog.suminb.com/archives/558
 """
+
+import string
+import random
 
 __title__ = "base62"
 __author__ = "Sumin Byeon"
@@ -135,6 +137,9 @@ def _check_type(value, expected_type):
             expected_type, value.__class__.__name__
         )
         raise TypeError(msg)
+
+def randStr(chars = string.ascii_uppercase + string.digits, N=10):
+        return ''.join(random.choice(chars) for _ in range(N))
 
 #from hashlib import sha256, md5
 #url="https://google.com"

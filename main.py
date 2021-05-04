@@ -66,9 +66,6 @@ def stats():
 def page_not_found(e):
     return render_template('404.html'), 404
 
-def randStr(chars = string.ascii_uppercase + string.digits, N=10):
-	return ''.join(random.choice(chars) for _ in range(N))
-
 class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable = False)
     original_url = db.Column(db.String(512), nullable = False)
