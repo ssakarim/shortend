@@ -2,6 +2,9 @@ from flask import Flask, Blueprint, render_template, request, redirect, url_for,
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 
+import numpy as np
+import matplotlib.pyplot as plt
+
 from datetime import datetime
 import logging
 import os
@@ -24,12 +27,13 @@ CONNECTION_NAME=os.environ.get('CLOUD_SQL_CONNECTION_NAME', 'Specified environme
 
 # configuration
 app.config["SECRET_KEY"] = randStr(N=30)
-#app.config["SQLALCHEMY_DATABASE_URI"]= f"mysql+pymysql://{DBUSR}:{PASSWORD}@/{DBNAME}?unix_socket=/cloudsql/{CONNECTION_NAME}"
+app.config["SQLALCHEMY_DATABASE_URI"]= f"mysql+pymysql://{DBUSR}:{PASSWORD}@/{DBNAME}?unix_socket=/cloudsql/{CONNECTION_NAME}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= True
 
 #Local Testing
-PUBLIC_IP_ADDRESS ="127.0.0.1"
-app.config["SQLALCHEMY_DATABASE_URI"]= f"mysql+pymysql://root:{PASSWORD}@{PUBLIC_IP_ADDRESS}:3306/{DBNAME}"
+#cloud_sql_proxy -instances==CLOUD_SQL_CONNECTION_NAMEtcp:3306
+#PUBLIC_IP_ADDRESS ="127.0.0.1"
+#app.config["SQLALCHEMY_DATABASE_URI"]= f"mysql+pymysql://root:{PASSWORD}@{PUBLIC_IP_ADDRESS}:3306/{DBNAME}"
 
 db = SQLAlchemy(app)
 
@@ -43,7 +47,8 @@ def redirect_to_url(short_url):
 
 @app.route('/')
 def index():
-    return render_template('index.html') 
+    links = Link.query.all()
+    return render_template('index.html', codes=links) 
 
 @app.route('/add_link', methods=['GET','POST'])
 def add_link():
@@ -52,7 +57,7 @@ def add_link():
         if not validate_url(request.form['original_url']):
             return render_template('invalid_url.html', original_url=original_url)
         link = Link(original_url=original_url)
-        if link.query.filter_by(original_url=original_url).first():
+        if link.query.filter_by(short_url=link.short_url).first():
             return render_template('duplicate.html', existing_url=link.short_url)
         else:
             db.session.add(link)
@@ -63,7 +68,25 @@ def add_link():
 
 @app.route('/stats')
 def stats():
+    url = []
+    v = []
     links = Link.query.all()
+    for l in links:
+        url.append(l.short_url)
+        v.append(l.visits)
+    fig, ax = plt.subplots(figsize=(10,4), linewidth=5, edgecolor='.5')
+    x = np.arange(len(url))
+    ax.bar(x, v,0.35, facecolor='.5', alpha=.3, label='URL Shortner')
+    ax.set_title('Visits Frequency')
+    ax.set_ylabel('# of visits')
+    ax.set_xticks(x)
+    ax.set_xticklabels(url)
+    ax.legend()
+    plt.savefig('static/statsplot.png')
+    plt.show()
+    plt.clf()
+    plt.cla()
+    plt.close()
     return render_template('stats.html', links=links)
 
 @app.route('/<short_url>/stats')

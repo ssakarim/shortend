@@ -14,6 +14,8 @@ httptools = "*"
 mysqlclient = "*"
 flask = "*"
 flask-mysqldb = "*"
+numpy = "*"
+matplotlib = "*"
 
 [dev-packages]
 

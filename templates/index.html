@@ -13,11 +13,11 @@
   <div class="card-deck mb-3">
     <div class="card mb-4 shadow-sm">
       <div class="card-header">
-        <h4 class="my-0 font-weight-normal text-center">Website</h4>
+        <h4 class="my-0 font-weight-normal text-center">Original URL</h4>
       </div>
       <div class="card-body">
         <form action="add_link" method="post">
-          <label for="url">Original URL</label>
+          <!--label for="url">Original URL</label-->
           <input type="url" class="form-control" name="original_url" id="url" value="" required>
           <br>
           <button class="btn btn-primary btn-lg btn-block" type="submit">Shorten</button>
@@ -26,5 +26,17 @@
     </div>
   </div>
 </div>
+
+  {% if codes %}
+  <h5>The Short URLs in the System</h5>
+  <h5>Click to view the stats for the individual items:</h5>
+  <ul>
+    {% for code in codes %}
+    <a href="{{ url_for('url_stats', short_url=code.short_url) }}">
+      <li>{{ code.short_url }}</li>
+    </a>
+    {% endfor %}
+  </ul>
+  {% endif %}
 
 {% endblock %}
